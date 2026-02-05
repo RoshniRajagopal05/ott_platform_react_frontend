@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Navbar from './Navbar';
+import "../styles/signup.css";
 
 function Signup() {
     var [name, setName] = useState('');
@@ -41,26 +41,33 @@ function registerUser(event){
         });
 }
 
+return (
+    <div className="auth-bg">
+  <div className="auth-card">
+    
+    <h2 className="signup-title">Sign Up</h2>
 
-  return (
-    <>
-    <Navbar />
-    <div className="signup-container">
-      <h2 className="signup-title">Sign Up</h2>
-      {errorMessage ? <div className="alert alert-danger">{errorMessage}</div> : ''}
-      <form className="signup-form">
-        <input type="text" placeholder="Name" required value={name} onInput={(event) => setName(event.target.value)} />
-        <input type="email" placeholder="E-mail" required value={email} onInput={(event) => setEmail(event.target.value)} />
-        <input type="password" placeholder="Password" required value={password} onInput={(event) => setPassword(event.target.value)} />
-        <input type="password" placeholder="Confirm Password" required value={passwordConf} onInput={(event) => setPasswordConf(event.target.value)} />
-        <p className="login-link">
-          Already have an account? <Link to="/login">Login</Link>
-        </p>
-        <button type="submit" className="signup-button" onClick={registerUser}>Sign Up</button>
-      </form>
-    </div>
-    </>
-  );
+    {errorMessage && (
+      <div className="alert alert-danger">{errorMessage}</div>
+    )}
+
+    <form className="signup-form">
+      <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
+      <input type="email" placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)} required />
+      <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+      <input type="password" placeholder="Confirm Password" value={passwordConf} onChange={(e) => setPasswordConf(e.target.value)} required />
+
+      <p className="login-link">
+        Already have an account? <Link to="/login">Login</Link>
+      </p>
+
+      <button className="signup-button" onClick={registerUser}>
+        Sign Up
+      </button>
+    </form>
+  </div>
+</div>
+    );
 }
 
 export default Signup;

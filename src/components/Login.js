@@ -4,7 +4,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Navbar from './Navbar';
+
+import "../styles/login.css";
+
 
 
 const Login = () => {
@@ -24,15 +26,15 @@ const Login = () => {
       .then(response => {
         setErrorMessage('');
         const token = response.data.token;
-        const user = response.data.userid;
+        const user = response.data.user;
 
-        localStorage.setItem('authToken', token);
-        localStorage.setItem('user', user);
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
 
-        setSuccessMessage('User logged in'); 
+        setSuccessMessage('User logged in');
 
         setTimeout(() => {
-          navigate('/movielisting');
+          navigate('/landingpage');
         }, 1500);
       })
       .catch(error => {
@@ -46,13 +48,16 @@ const Login = () => {
   };
 
   return (
-  <>
-    <Navbar />
-    <div className="signup-container">
+  <div className="auth-bg auth-login-bg">
+    <div className="auth-card">
       <h2 className="signup-title">Login</h2>
 
-      {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
-      {successMessage && <div className="alert alert-success">{successMessage}</div>}
+      {errorMessage && (
+        <div className="alert alert-danger">{errorMessage}</div>
+      )}
+      {successMessage && (
+        <div className="alert alert-success">{successMessage}</div>
+      )}
 
       <form className="signup-form" onSubmit={attemptLogin}>
         <input
@@ -60,25 +65,26 @@ const Login = () => {
           placeholder="E-mail"
           required
           value={email}
-          onInput={(e) => setEmail(e.target.value)} />
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
         <input
           type="password"
           placeholder="Password"
           required
           value={password}
-          onInput={(e) => setPassword(e.target.value)} />
-        <button type="submit" className="signup-button">Login</button>
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        <button type="submit" className="signup-button">
+          Login
+        </button>
       </form>
 
       <p className="login-link">
-        Don't have an account? <Link to="/signup">Signup</Link>
+        Don't have an account? <Link to="/">Signup</Link>
       </p>
     </div>
-  </>
-  );
-};
-
+  </div>
+)};
 export default Login;
-
-
-

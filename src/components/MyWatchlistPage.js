@@ -76,75 +76,88 @@
 
 
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Navbar from './Navbar';
+import { FaArrowLeft, FaTrash } from 'react-icons/fa';
+import '../styles/glass-landing.css';
 
 const MyWatchlistPage = () => {
   const [watchlist, setWatchlist] = useState([]);
-  const [movies, setMovies] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
-
-    setWatchlist(storedWatchlist);
-
-    // 🔃 Fetch full movie details based on stored IDs
-    const fetchMovies = async () => {
-      try {
-        const responses = await Promise.all(
-          storedWatchlist.map(id =>
-            axios.get(` http://127.0.0.1:8000/api/watchlist/${id}/`)
-          )
-        );
-        setMovies(responses.map(res => res.data));
-      } catch (error) {
-        console.error("Failed to fetch movies:", error);
-      }
-    };
-
-    if (storedWatchlist.length > 0) {
-      fetchMovies();
+    const token = localStorage.getItem('token');
+    if (token) {
+      axios.get('http://127.0.0.1:8000/api/watchlist/', {
+        headers: { Authorization: `Token ${token}` }
+      })
+        .then(res => setWatchlist(res.data))
+        .catch(err => console.error(err));
+    } else {
+      navigate('/login');
     }
-  }, []);
+  }, [navigate]);
 
   const removeFromWatchlist = (id) => {
-    const updatedWatchlist = watchlist.filter(movieId => movieId !== id);
-    setWatchlist(updatedWatchlist);
-    localStorage.setItem('watchlist', JSON.stringify(updatedWatchlist));
-    setMovies(movies.filter(movie => movie.id !== id));
+    const token = localStorage.getItem('token');
+    axios.delete(`http://127.0.0.1:8000/api/watchlist/`, {
+      data: { id },
+      headers: { Authorization: `Token ${token}` }
+    })
+      .then(() => {
+        setWatchlist(watchlist.filter(item => item.id !== id));
+      })
+      .catch(err => console.error(err));
   };
 
   return (
-    <>
-    <Navbar />
-    <div className="watchlist-container">
-      <h1 className="watchlist-heading">My Watchlist</h1>
+    <div className="glass-bg">
+      <div className="glass-panel" style={{ paddingTop: '100px' }}>
+        <button className="back-btn" onClick={() => navigate('/landingpage')}>
+          <FaArrowLeft /> Back to Home
+        </button>
+        <h1 style={{ color: 'white', textAlign: 'center', marginBottom: '20px' }}>My Watchlist</h1>
 
-      {movies.length === 0 ? (
-        <p className="no-movies">No movies added to watchlist.</p>
-      ) : (
-        <div className="card-grid">
-          {movies.map(movie => (
-            <div key={movie.id} className="card">
-              <Link to={`/moviedetails/${movie.id}`}>
-                <img
-                  src={`http://127.0.0.1:8000${movie.thumbnail}`}
-                  alt={movie.title}
-                  className="movie-thumbnail" />
-                <h4 className="movie-title">{movie.title}</h4>
-              </Link>
-              <button
-                className="remove-button"
-                onClick={() => removeFromWatchlist(movie.id)}
-              >
-                ❌ Remove
-              </button>
-            </div>
-          ))}
+        <div className="movie-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
+          {watchlist.length > 0 ? (
+            watchlist.map((item) => (
+              <div key={item.id} className="glass-movie-card">
+                <Link to={`/moviedetails/${item.movie.id}`} style={{ textDecoration: 'none' }}>
+                  <img
+                    src={`http://127.0.0.1:8000/${item.movie.thumbnail}`}
+                    alt={item.movie.title}
+                  />
+                  <div className="movie-info">
+                    <div className="movie-title">{item.movie.title}</div>
+                  </div>
+                </Link>
+                <button
+                  onClick={() => removeFromWatchlist(item.id)}
+                  style={{
+                    background: 'rgba(255, 0, 0, 0.7)',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    color: 'white',
+                    padding: '8px 12px',
+                    borderRadius: '20px',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                    transition: 'all 0.3s ease',
+                    backdropFilter: 'blur(10px)',
+                    marginTop: '10px'
+                  }}
+                  onMouseEnter={(e) => e.target.style.background = 'rgba(255, 0, 0, 0.9)'}
+                  onMouseLeave={(e) => e.target.style.background = 'rgba(255, 0, 0, 0.7)'}
+                >
+                  <FaTrash /> Remove
+                </button>
+              </div>
+            ))
+          ) : (
+            <p style={{ color: 'white', textAlign: 'center', fontSize: '18px' }}>Your watchlist is empty.</p>
+          )}
         </div>
-      )}
-    </div></>
+      </div>
+    </div>
   );
 };
 

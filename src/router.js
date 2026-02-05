@@ -11,9 +11,10 @@ import WatchHistoryPage from './components/WatchHistoryPage';
 
 
 const router = createBrowserRouter([
-  { path: "/", element: <LandingPage /> },
-  { path: "/signup", element: <Signup /> },
+  { path: "/landingpage", element: <LandingPage /> },
+  { path: "/", element: <Signup /> },
   { path: "/login", element: <Login /> },
+  
   { path: "/change-password", element: <ChangePassword /> },
   { path: "/movielisting", element: <MovieListingPage /> },
   { path: "/moviedetails/:id", element: <MovieDetailsPage /> },
