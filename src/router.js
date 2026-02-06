@@ -7,6 +7,7 @@ import MovieListingPage from "./components/MovieListingPage";
 import MovieDetailsPage from "./components/MovieDetailsPage";
 import MyWatchlistPage from "./components/MyWatchlistPage"; 
 import WatchHistoryPage from './components/WatchHistoryPage';
+import UserProfile from "./components/UserProfile";
 
 
 
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
   { path: "/moviedetails/:id", element: <MovieDetailsPage /> },
   { path: "/mywatchlist", element: <MyWatchlistPage /> },
   { path: "/watchhistory", element: <WatchHistoryPage/> },
+  { path: "/profile", element: <UserProfile /> },
   
 
 

@@ -104,7 +104,7 @@ const MovieListingPage = () => {
           />
         </div>
 
-        <div className="movie-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
+        <div className="movie-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '20px' }}>
           {filteredMovies.length > 0 ? (
             filteredMovies.map((movie) => (
               <div key={movie.id} className="glass-movie-card" onClick={() => handleMovieClick(movie)}>

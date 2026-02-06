@@ -39,7 +39,7 @@ const WatchHistoryPage = () => {
         </button>
         <h1 style={{ color: 'white', textAlign: 'center', marginBottom: '20px' }}>Watch History</h1>
 
-        <div className="movie-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
+        <div className="movie-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '20px' }}>
           {history.length === 0 ? (
             <p style={{ color: 'white', textAlign: 'center', fontSize: '18px', gridColumn: '1 / -1' }}>No watch history yet.</p>
           ) : (

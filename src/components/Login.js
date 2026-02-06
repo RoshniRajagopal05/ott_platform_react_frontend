@@ -30,6 +30,7 @@ const Login = () => {
 
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('userPassword', password);
 
         setSuccessMessage('User logged in');
 

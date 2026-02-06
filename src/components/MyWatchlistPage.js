@@ -118,7 +118,7 @@ const MyWatchlistPage = () => {
         </button>
         <h1 style={{ color: 'white', textAlign: 'center', marginBottom: '20px' }}>My Watchlist</h1>
 
-        <div className="movie-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
+        <div className="movie-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '20px' }}>
           {watchlist.length > 0 ? (
             watchlist.map((item) => (
               <div key={item.id} className="glass-movie-card">

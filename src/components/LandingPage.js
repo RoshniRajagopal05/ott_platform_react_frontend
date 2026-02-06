@@ -105,7 +105,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { FaHome, FaSearch, FaHeart, FaHistory, FaCog, FaSignOutAlt, FaStar, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaHome, FaSearch, FaHeart, FaHistory, FaCog, FaSignOutAlt, FaStar, FaChevronLeft, FaChevronRight, FaUser } from 'react-icons/fa';
 import '../styles/glass-landing.css';
 
 const LandingPage = () => {
@@ -192,7 +192,7 @@ const LandingPage = () => {
                 <span>{movie.description ? movie.description.substring(0, 50) + '...' : 'No description'}</span>
                 <div className="movie-rating">
                   <FaStar />
-                  {Math.floor(Math.random() * 5) + 1} {/* Random rating for demo */}
+                  {parseFloat(movie.rating || 8.5).toFixed(1)}/10
                 </div>
               </div>
             </div>
@@ -221,6 +221,7 @@ const LandingPage = () => {
         <div className="sidebar-brand">MOOVIX</div>
         <ul className="sidebar-menu">
           <li onClick={() => handleNavigation('/landingpage')}><FaHome /> Home</li>
+          <li onClick={() => handleNavigation('/profile')}><FaUser /> Profile</li>
           <li onClick={() => handleNavigation('/movielisting')}><FaSearch /> Browse</li>
           <li onClick={() => handleNavigation('/mywatchlist')}><FaHeart /> Watchlist</li>
           <li onClick={() => handleNavigation('/watchhistory')}><FaHistory /> History</li>
