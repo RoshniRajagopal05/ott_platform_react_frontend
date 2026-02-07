@@ -106,6 +106,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaHome, FaSearch, FaHeart, FaHistory, FaCog, FaSignOutAlt, FaStar, FaChevronLeft, FaChevronRight, FaUser } from 'react-icons/fa';
+import LogoutModal from './LogoutModal';
 import '../styles/glass-landing.css';
 
 const LandingPage = () => {
@@ -113,6 +114,7 @@ const LandingPage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [activeCategory, setActiveCategory] = useState('all');
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -165,9 +167,19 @@ const LandingPage = () => {
   };
 
   const handleLogout = () => {
+    setShowLogoutModal(true);
+  };
+
+  const confirmLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('userPassword');
+    setShowLogoutModal(false);
     navigate('/login');
+  };
+
+  const cancelLogout = () => {
+    setShowLogoutModal(false);
   };
 
   const renderCarousel = (title, movieList, carouselId) => (
@@ -272,6 +284,14 @@ const LandingPage = () => {
           </div>
         )}
       </div>
+
+      {/* Logout Modal */}
+      <LogoutModal
+        isOpen={showLogoutModal}
+        userName={user?.name || 'there'}
+        onConfirm={confirmLogout}
+        onCancel={cancelLogout}
+      />
     </div>
   );
 };

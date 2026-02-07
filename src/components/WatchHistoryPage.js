@@ -110,77 +110,132 @@ const WatchHistoryPage = () => {
             </button>
           </div>
         ) : (
-          <div className="movie-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '20px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '24px' }}>
             {aggregatedHistory.map((item) => (
-              <div key={item.id} style={{ position: 'relative', borderRadius: '15px', overflow: 'hidden' }} className="glass-movie-card">
-                <div onClick={() => navigate(`/moviedetails/${item.movie.id}`)} style={{ cursor: 'pointer' }}>
+              <div 
+                key={`${item.movie.id}`}
+                onClick={() => navigate(`/moviedetails/${item.movie.id}`)}
+                style={{
+                  cursor: 'pointer',
+                  borderRadius: '16px',
+                  overflow: 'hidden',
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  backdropFilter: 'blur(20px)',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
+                  display: 'flex',
+                  flexDirection: 'column'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.boxShadow = '0 12px 48px rgba(168, 85, 247, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.2)';
+                }}
+              >
+                {/* Movie Thumbnail */}
+                <div style={{
+                  position: 'relative',
+                  paddingTop: '140%',
+                  overflow: 'hidden',
+                  background: 'rgba(0, 0, 0, 0.3)'
+                }}>
                   <img
                     src={`http://127.0.0.1:8000${item.movie.thumbnail}`}
                     alt={item.movie.title}
                     style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
                       width: '100%',
                       height: '100%',
                       objectFit: 'cover'
                     }}
                   />
-                  <div className="movie-info">
-                    <div className="movie-title">{item.movie.title}</div>
-                    <div style={{ marginTop: '10px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                      {item.movie.rating && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <FaStar style={{ color: '#fbbf24', fontSize: '12px' }} />
-                          <span style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.8)' }}>
-                            {parseFloat(item.movie.rating).toFixed(1)}/10
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
                 </div>
 
-                {/* Watch History Info Overlay */}
+                {/* Movie Info Section */}
                 <div style={{
-                  position: 'absolute',
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  padding: '20px',
-                  background: 'linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.95) 100%)',
+                  padding: '18px',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '8px'
+                  gap: '12px',
+                  flex: 1
                 }}>
+                  {/* Title */}
                   <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    background: 'rgba(168, 85, 247, 0.6)',
-                    padding: '8px 12px',
-                    borderRadius: '18px',
-                    backdropFilter: 'blur(10px)',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                    fontSize: '12px',
                     color: 'white',
-                    fontWeight: '600'
+                    fontSize: '15px',
+                    fontWeight: '700',
+                    lineHeight: '1.4',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical'
                   }}>
-                    <FaEye style={{ fontSize: '13px' }} />
-                    {item.count} {item.count === 1 ? 'watch' : 'watches'}
+                    {item.movie.title}
                   </div>
+
+                  {/* Rating */}
+                  {item.movie.rating && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <FaStar style={{ color: '#fbbf24', fontSize: '13px' }} />
+                      <span style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.85)', fontWeight: '600' }}>
+                        {parseFloat(item.movie.rating).toFixed(1)}/10
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Watch Stats - Below content without overlapping */}
                   <div style={{
                     display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    background: 'rgba(34, 211, 238, 0.6)',
-                    padding: '8px 12px',
-                    borderRadius: '18px',
-                    backdropFilter: 'blur(10px)',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                    fontSize: '11px',
-                    color: 'white',
-                    fontWeight: '600'
+                    gap: '10px',
+                    marginTop: 'auto',
+                    paddingTop: '12px',
+                    borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+                    flexWrap: 'wrap'
                   }}>
-                    <FaClock style={{ fontSize: '12px' }} />
-                    {formatWatchDate(item.lastWatched)}
+                    {/* Watch Count Badge */}
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.5), rgba(139, 92, 246, 0.5))',
+                      padding: '6px 10px',
+                      borderRadius: '16px',
+                      backdropFilter: 'blur(10px)',
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      fontSize: '12px',
+                      color: 'white',
+                      fontWeight: '600'
+                    }}>
+                      <FaEye style={{ fontSize: '11px' }} />
+                      {item.count} {item.count === 1 ? 'watch' : 'watches'}
+                    </div>
+
+                    {/* Last Watched Badge */}
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      background: 'linear-gradient(135deg, rgba(34, 211, 238, 0.5), rgba(6, 182, 212, 0.5))',
+                      padding: '6px 10px',
+                      borderRadius: '16px',
+                      backdropFilter: 'blur(10px)',
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      fontSize: '12px',
+                      color: 'white',
+                      fontWeight: '600'
+                    }}>
+                      <FaClock style={{ fontSize: '11px' }} />
+                      {formatWatchDate(item.lastWatched)}
+                    </div>
                   </div>
                 </div>
               </div>

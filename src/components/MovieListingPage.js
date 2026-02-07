@@ -82,6 +82,7 @@ const MovieListingPage = () => {
       }
     })
     .then(response => {
+      console.log('Watchlist response:', response.data, response.status);
       if (response.data.action === 'removed') {
         setToast({ message: `Removed "${movie.title}" from watchlist`, type: 'info' });
         setWatchlistedMovies(prev => {
@@ -89,9 +90,9 @@ const MovieListingPage = () => {
           updated.delete(movie.id);
           return updated;
         });
-      } else {
+      } else if (response.data.action === 'added') {
         setToast({ message: `"${movie.title}" added to watchlist`, type: 'success' });
-        setWatchlistedMovies(new Set([...watchlistedMovies, movie.id]));
+        setWatchlistedMovies(prev => new Set(prev).add(movie.id));
       }
     })
     .catch(error => {

@@ -99,7 +99,14 @@ const MyWatchlistPage = () => {
       })
         .then(res => {
           console.log('Watchlist data:', res.data);
-          setWatchlist(res.data);
+          // Deduplicate movies by movie ID and keep the first entry
+          const uniqueMovies = {};
+          res.data.forEach(item => {
+            if (!uniqueMovies[item.movie.id]) {
+              uniqueMovies[item.movie.id] = item;
+            }
+          });
+          setWatchlist(Object.values(uniqueMovies));
         })
         .catch(err => {
           console.error('Error fetching watchlist:', err);
